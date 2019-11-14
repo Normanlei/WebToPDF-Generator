@@ -24,16 +24,16 @@ let usercolor;
 let htmlfile;
 let html;
 
-// function convertToPDF (html, pdfname){
-//     var options = { format: 'A4' };
-//     pdf.create(html, options).toFile(pdfname, function(err, res) {
-//         if (err) return console.log(err);
-//         console.log(res);
-//       });
-// }
-
-function convertToPDF(html) {
+function convertToPDF (html, pdfname){
+    var options = { format: 'A4' };
+    pdf.create(html, options).toFile(pdfname, function(err, res) {
+        if (err) return console.log(err);
+        console.log(res);
+      });
 }
+
+// function convertToPDF(html) {
+// }
 
 
 
@@ -41,8 +41,8 @@ async function writeToFile(fileName, data) {
     let writefileAsync = util.promisify(fs.writeFile);
     await writefileAsync(fileName, data);
     html = fs.readFileSync('./index.html', 'utf8');
-    //convertToPDF(html, "index.pdf");
-    convertToPDF(html);
+    convertToPDF(html, "index.pdf");
+    //convertToPDF(html);
 }
 
 function init() {

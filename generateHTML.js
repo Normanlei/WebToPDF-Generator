@@ -174,35 +174,50 @@ let formHTML = function generateHTML(data) {
     </head>
 
     <body>
-        <div class="wrapper">
-            <div class="photo-header">
-                <img src=${data.avatar_url} alt="selfie" id="selfie">
-                <h1>Hi</h1>
-                <h2>My name is ${data.name}</h2>
-                <p class="workExp-date">Currently: @ Trilogy Education Services</p>
-                <ul class="links-nav">
-                    <li class="nav-link">${data.location}</li>
-                    <li class="nav-link">Github</li>
-                    <li class="nav-link">Blog</li>
-                </ul>
-            </div>
+      <div class="wrapper">
+          <div class="photo-header">
+              <img src="${data.avatar_url}">
+              <h1>Hi!</h1>
+              <h2>My name is ${data.name}</h2>
+              <h6>Currently @ Trilogy Education Services</h6>
+              <ul class="links-nav">
+                  <li class="nav-link"><a href="https://www.google.com/maps/search/?api=1&query=${data.location}" target="_blank"><i class="fas fa-location-arrow"></i>&nbsp;${data.location}</a></li>
+                  <li class="nav-link"><a href="${data.html_url}" target="_blank"><i class="fab fa-github-alt"></i>&nbsp;Github</a></li>
+                  <li class="nav-link"><a href="${data.blog}" target="_blank"><i class="fas fa-rss"></i>&nbsp;Blog</a></li>
+              </ul>
+          </div>
 
-
-            <main>
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card">${data.public_repos}</div>
-                            <div class="card">${data.public_gists}</div>
-                        </div>
-                        <div class="col">
-                            <div class="card">${data.followers}</div>
-                            <div class="card">${data.following}</div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+          <main>
+              <div class="container">
+                  <div class="row">
+                      <h3 class="col">${data.bio}</h3>
+                      <!--bio-->
+                  </div>
+                  <div class="row">
+                      <div class="col">
+                          <div class="card">
+                              <h3>Public Repositories</h3>
+                              <h4>${data.public_repos}</h4>
+                          </div>
+                          <div class="card">
+                              <h3>Followers</h3>
+                              <h4>${data.followers}</h4>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="card">
+                              <h3>Github Stars</h3>
+                              <h4>${data.public_gists}</h4>
+                          </div>
+                          <div class="card">
+                              <h3>Followers</h3>
+                              <h4>${data.followers}</h4>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </main>
+      </div>
     </body>
 </html>`
 };
