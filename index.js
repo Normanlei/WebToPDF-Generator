@@ -13,7 +13,8 @@ const questions = [
 ];
 
 const util = require("util");
-const pdf = require("html-pdf");
+// const pdf = require("html-pdf");
+const convertFactory = require('electron-html-to');
 const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require("fs");
