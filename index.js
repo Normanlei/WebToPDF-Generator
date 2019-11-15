@@ -13,8 +13,9 @@ const questions = [
 ];
 
 const util = require("util");
+const puppeteer = require('puppeteer');
 // const pdf = require("html-pdf");
-const convertFactory = require('electron-html-to');
+// const convertFactory = require('electron-html-to');
 const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require("fs");
@@ -25,16 +26,22 @@ let usercolor;
 let htmlfile;
 let html;
 
-function convertToPDF (html, pdfname){
-    var options = { format: 'A4' };
-    pdf.create(html, options).toFile(pdfname, function(err, res) {
-        if (err) return console.log(err);
-        console.log(res);
-      });
-}
-
-// function convertToPDF(html) {
+// function convertToPDF(html, pdfname) {
+//     // var options = { format: 'Letter' };
+//     // pdf.create(html, options).toFile(pdfname, function(err, res) {
+//     //     if (err) return console.log(err);
+//     //     console.log(res);
+//     //   });
 // }
+
+async function convertToPDF(html,pdfname) {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(html);
+        //   await page.goto('file:index.html', {waitUntil: 'networkidle2'});
+        await page.pdf({ path: pdfname, format: 'A4' });
+        await browser.close();
+}
 
 
 
