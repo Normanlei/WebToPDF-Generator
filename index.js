@@ -37,7 +37,7 @@ let html;
 async function convertToPDF(html,pdfname) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        await page.setContent(html);
+        await page.setContent(html,{waitUntil: 'networkidle0'});
         //   await page.goto('file:index.html', {waitUntil: 'networkidle2'});
         await page.pdf({ path: pdfname, format: 'A4' });
         await browser.close();
