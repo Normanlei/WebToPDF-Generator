@@ -1,3 +1,4 @@
+//Global Definition
 const questions = [
     {
         type: "input",
@@ -14,68 +15,68 @@ const questions = [
 
 const util = require("util");
 const puppeteer = require('puppeteer');
-// const pdf = require("html-pdf");
-// const convertFactory = require('electron-html-to');
 const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require("fs");
 const generateHTML = require("./generateHTML");
+
 let githubURL;
 let username;
 let usercolor;
 let htmlfile;
 let html;
 
-// function convertToPDF(html, pdfname) {
-//     // var options = { format: 'Letter' };
-//     // pdf.create(html, options).toFile(pdfname, function(err, res) {
-//     //     if (err) return console.log(err);
-//     //     console.log(res);
-//     //   });
-// }
-
-async function convertToPDF(html,pdfname) {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(html,{waitUntil: 'networkidle0'});
-        //   await page.goto('file:index.html', {waitUntil: 'networkidle2'});
-        await page.pdf({ path: pdfname, format: 'A4' });
-        await browser.close();
-}
-
-
-
-async function writeToFile(fileName, data) {
-    let writefileAsync = util.promisify(fs.writeFile);
-    await writefileAsync(fileName, data);
-    html = fs.readFileSync('./index.html', 'utf8');
-    convertToPDF(html, "index.pdf");
-    //convertToPDF(html);
-}
-
+// initialize with question prompt
 function init() {
     inquirer.prompt(questions)
         .then(function (userInput) {
             username = userInput.username;
-            usercolor = userInput.color;
+            usercolor = userInput.color; 
             username = username.toLowerCase().trim();
-            // console.log(usercolor);
-            // console.log(username);
             githubURL = `https://api.github.com/users/${username}`;
             return githubURL;
+        }, function(error){
+            console.log("Enter valid inputs!",error);
         })
-        .then(function (githubURL) {
+        .then(function (githubURL) {  //call github API
             callAxios(githubURL);
         });
 }
+
 
 function callAxios(url) {
     axios.get(url)
         .then(function (response) {
             response.data.color = usercolor; //adding data color property
-            htmlfile = generateHTML(response.data);
-            writeToFile("index.html", htmlfile);
+            htmlfile = generateHTML(response.data);  // return html from generateHTML function
+            writeToFile(`${username}_profile.html`, htmlfile); // write to .html file
+        })
+        .catch(function(error){
+            console.log("Make sure input a valid username of your github",error);
         })
 }
 
+async function writeToFile(fileName, data) {
+    let writefileAsync = util.promisify(fs.writeFile);
+    await writefileAsync(fileName, data, error=>{
+        if (error) console.log(error);
+    });
+    console.log("html file is generated successfully!!!");
+    html = fs.readFileSync(`${username}_profile.html`, 'utf8');
+    convertToPDF(html, `${username}_profile.pdf`);
+}
+
+
+async function convertToPDF(html,pdfname) {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(html,{waitUntil: 'networkidle0'});
+        await page.pdf({ path: pdfname, format: 'A4' },error=>{
+            if (error) console.log(error);
+        });
+        console.log("pdf file is generated successfully!!!")
+        await browser.close();
+}
+
+//trigger
 init();
